@@ -1,0 +1,68 @@
+.timetable
+	margin 0px
+	.panel
+		margin-bottom 0px
+		.panel-heading
+			padding 10px 0px
+			font-size 13px
+		.prev
+		.next
+			cursor pointer
+			&:hover
+				color #FA787D
+	.panel-body
+		padding 0px 
+		height 285px
+		td
+			font-size 13px
+			text-align center
+			position relative
+			left 0px
+			top 0px
+			span.busy
+				position absolute
+				right 2px
+				top 3px
+				width 14px
+				height 14px
+				border-radius 50%
+				background-color #8BD8A2
+				font-size 13px
+				text-align center
+				line-height 14px
+				color #fff
+				
+			&:hover
+				cursor pointer
+				background #FA787D
+				color #fff
+			&.disable
+			&.expire
+				color #ccc
+				span.busy
+					background-color #ccc
+				&:hover	
+				&.active
+					background-color #ccc
+					color #fff
+					span.busy
+						background-color #F6D5E0
+					
+					
+			&.active
+				background-color #FA787D
+				color #fff
+			&.selected
+				background-color #C8BFE7
+				color #fff
+	.panel-footer
+		padding 0px 0px 0px 10px
+		margin 0px
+		height 40px
+		line-height 40px
+		.btn
+			margin-top 4px
+			margin-right 10px
+			padding 4px 10px
+			font-size 13px
+		

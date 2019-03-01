@@ -1,0 +1,84 @@
+<div class="md-modal md-effect-7"  id="course_alter">
+	<div class="md-content">
+		<h3>
+			{{current.username}}的休假
+			<span class="glyphicon glyphicon-remove" @click='close'></span> 		
+		</h3>
+
+		<div class="md-body row">
+			<div class="col-md-7 show">
+				<h4>休假记录</h4>
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>开始日期</th>
+							<th>结束日期</th>
+							<th>休学天数</th>
+							<th>休学状态</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<template v-if='fetching'>
+							<tr class='empty'>
+								<td colspan="5">正在请求数据...</td>
+							</tr>
+						</template>
+						<template v-else>
+							<template v-if='lists && lists.length'>
+								<tr v-for='item of lists'>
+									<td>{{item.off_sdate}}</td>
+									<td>{{item.cur_off_edate}}</td>
+									<td>{{item.cur_off_days | day}} days</td>
+									<td>{{item.cur_off_state | stateString}}</td>
+									<td>
+										<!-- 正在删除和停止 -->
+										<template v-if='item.stopping || item.removing'>
+											<span>正在处理..</span>
+										</template>
+										<template v-else>
+											<span v-if="item.cur_off_state==2" @click='remove(item)'>删除</span>
+
+											<span v-if="item.cur_off_state==1" @click='stop(item)'>结束</span>
+										</template>
+									</td>
+								</tr>
+							</template>
+							<template v-else>
+								<tr class='empty'>
+									<td colspan="5">没有休学记录</td>
+								</tr>
+							</template>
+						</template>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-md-5 form">
+				<div>
+					<h5>开始日期</h5>
+					<input type="date" v-model='cache.sdate' @change='change'>
+				</div>
+				<div>
+					<h5>结束日期</h5>
+					<input type="date" v-model='cache.edate' @change='change'>					
+				</div>
+				<div>
+					<p>剩余休学：{{limit}} days</p>
+					<p>本次休学天数：{{cache.size}} days</p>
+					<p style='color:#fa787d'>	
+						提示: 用户休学时记得在'详情'中将课程状态设为'frozen'!
+					</p>
+				</div>
+
+				<div class='btnBox text-left'>
+					<button class="btn" v-if='adding'>正在提交..</button>
+					<button class="btn" @click='add' v-else>开始休学</button>
+				</div>
+			</div>
+		</div>
+
+		<div class='md-footer'>
+			<button class='btn btn-default' @click='close'>返回</button>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,47 @@
+<div id="classroom_alter" class="md-modal md-effect-7">
+	<div class="md-content">
+		<h3>
+			Classroom use
+			<span class='glyphicon glyphicon-remove' @click='close'></span>
+		</h3>
+		
+		<div class="body">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Classroom</th>
+						<th>Teacher</th>
+						<th>Time</th>
+						<th>State</th>
+						<th>Host</th>
+						<th>Student</th>
+					</tr>
+				</thead>
+				<tbody>
+					<template v-if='shows.length'>
+						<tr v-for='item of shows' :class="item.host_joined == 'true' ? 'active' : ''">
+							<td>{{item.classroom_id}}</td>
+							<td>{{item.room_id}}</td>
+							<td>{{item.teacher_username || 'None'}}</td>
+							<td>{{item.class_datetime || 'None'}}</td>
+							<td>{{item.meeting_status}}</td>
+							<td>
+								{{item.host_joined == 'true' ? 'Joined' : 'Joined'}}
+							</td>
+							<td>{{item.participants_joined =='true' ? 'Joined' : 'Joined'}}</td>
+						</tr>
+					</template>
+					<template v-else>
+						<tr class="empty">
+							<td colspan="7">No classroom</td>
+						</tr>
+					</template>
+				</tbody>		
+			</table>
+		</div>
+	</div>
+</div>
+
+
+

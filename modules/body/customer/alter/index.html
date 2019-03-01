@@ -1,0 +1,70 @@
+<div id="customer_alter" class="md-modal md-effect-7">
+	<div class="md-content">
+		<h3>
+			生成订单链接
+			<span class='glyphicon glyphicon-remove' @click='close'></span>
+		</h3>
+		
+		<div class="body">
+
+				<div>
+				    <label>选择学生:</label>
+				    <input type="text" :value='searchText' v-model='searchText' @blur='blur' @focus='focus'>
+					
+					<p class='help-block'>
+						<span class='glyphicon glyphicon-info-sign'></span>
+						搜索后，选择用户，否则无效!
+					</p>
+
+				    <button class="btn searchBtn loading"  v-if='searching'>
+				    	<img src="_domain/images/loading.svg" alt="">
+				    </button>
+
+				    <button class="btn searchBtn" @click='serach' v-else>搜索</button>
+				    <ul class='usersBox' v-show='showed'>
+				    	<li v-for='item of users' @click='select(item)' :class='item.uid | isActive'>{{item.name}}</li>
+				    </ul>
+				</div>
+
+				<div>
+				    <label>付款期数:</label>
+				    <input :value='installment' v-model='installment'>
+				</div>
+
+				<div>
+				    <label>实际价格:</label>
+				    <input :value='order_price' v-model='order_price'>
+				</div>
+
+				<div class='url' v-if='url'>
+					<p v-if='creating'>
+						正在生成新的链接...
+					</p>
+					<p v-else>
+						<a href='{{url}}' target='_blank' @click="definiteClause">{{url}}</a>
+						<template v-if='showPostPaid'>
+							<span v-if="postPaiding" @click="postpaid">正在处理...</span>
+							<template v-else>
+								<a v-if="postPaided" target="_blank" href="http://www.hanbridgemandarin.com/school/my/course/classroom"><span>支付完成，进入用户账户</span></a>
+								<span v-else @click="postpaid">直接支付</span>
+							</template>
+						</template>
+					</p>
+				</div>
+
+				<div>
+					
+					<button class="btn btn-success submit" v-if='creating'>请求中...</button>
+					<button class="btn btn-success submit" @click='create' v-else>
+						生成订单 
+						<span v-show='selected.name'>( {{selected.name}} )</span>
+					</button>
+				</div>
+
+			
+		</div>
+	</div>
+</div>
+
+
+

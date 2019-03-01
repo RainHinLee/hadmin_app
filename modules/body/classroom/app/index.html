@@ -1,0 +1,95 @@
+<div class="classroom">
+	
+	<template v-if='fetching'>
+		<div class="empty">Loading...</div>
+	</template>
+
+	<template v-else>
+		<template v-if='course.length==0'>
+			<div class="empty">There is no schedule for the last week!</div>
+		</template>
+		<template v-else>
+			<ul class="row">
+				<li v-for='item in course' class='col-md-3'>
+					<div class='course_box'>
+						<div class='couser_info'>
+							<h4>{{item.class_date}} <small>{{item.class_stateS}}</small></h4>
+							<p>
+								{{item.class_stime}}-{{item.class_etime}} 
+								{{item.class_timelen}}Mins 
+								{{item.lesson_numS}}
+							</p>
+							<p>
+								{{item.lesson_typeS}}
+							</p>
+						</div>
+
+						<div class="course_person">
+							<p>Teacher：{{item.teacher_name}}</p>
+							<p>Student：{{item.student_username_str}}</p>
+<!-- 							<p>上课时间: {{item.class_datetime}}</p> -->
+						</div>
+
+						<div class="course_state">
+							<template v-if='item.classroom_id'>
+								<p>ID: {{item.classroom_id}}</p>
+								<p>Classroom：{{item.room_id}}</p>
+								<p>State： {{item.meeting_status}}</p>
+								<!--<p>Host：{{item.host_joined=='true' ? 'Join' : 'Not enter'}}</p>-->
+							</template>
+							<template v-else>
+								<p v-if='item.losed'>Link failed</p>
+								<p v-else>No classroom arrangement</p>
+							</template>						
+						</div>
+
+						<div class="course_action">
+
+							<p class='note'>
+								<span class='glyphicon glyphicon-info-sign'></span> This link will be available in 2 mins, you will need to apply again after 2 mins.
+							</p>	
+
+						
+							<template v-if='item.requesting'>
+								<button class="btn btn-info" @click='request(item)'>Processing...</button>
+							</template>
+							
+							<template v-else>
+								
+								<div class="selectBox">
+									<label>
+										<span>Platform：</span>
+										<select v-model="item.server_id">
+											<option value="USA">Webex</option>
+											<option value="zoom">Zoom</option>
+										</select>
+									</label>
+								</div>
+								
+								<template v-if='item.classroom_id'>
+									<a href='{{item.teacher_url}}' class="btn btn-success" target='_blank'>Join</a>
+									<button class="btn btn-info" @click='request(item)'>Reapply</button>									
+								</template>
+
+								<template v-else>
+									<button href='{{item.teacher_url}}' class="btn btn-info" @click='request(item)'>Apply</button>
+								</template>	
+							</template>
+						</div>
+					</div>
+				</li>			
+			</ul>
+
+			<div class="classroom_infos" >
+				<p v-if='rooms.fetched'>
+					<span class="key">Numbers</span>：<span class='value'>{{rooms.room_num}}</span> &nbsp;
+					<span class="key">Used</span>: <span class='value'>{{rooms.going_num || '0'}}</span> &nbsp;
+					<span class="key">Idle</span>: <span class='value'>{{rooms.room_num - rooms.going_num}}</span> &nbsp;
+					/ 
+					<span v-if='rooms.refreshing'>Refresh...</span>
+					<span class="btn btn-success btn-xs" @click='open' v-else>Detail</span>
+				</p>
+			</div>
+		</template>
+	</template>
+</div>

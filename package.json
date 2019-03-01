@@ -1,0 +1,13 @@
+{
+    "name": "bae-nodejs",
+    "version": "1.0.0",
+    "author": "bae",
+    "description": "The first bae nodejs app!",
+    "scripts": {
+        "start": "supervisor server.js",
+        "release": "fis3 release --dest ../../site --watch",
+        "online": "fis3 release --dest ../../online --watch"
+    },
+    "dependencies": {
+    }
+}

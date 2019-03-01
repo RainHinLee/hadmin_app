@@ -1,0 +1,16 @@
+<!-- 时间管理 -->
+<section class="calendar" style="max-width:1050px">
+
+	<div class='searchBox' v-if='isCanShowSearch' style='margin-bottom:10px'>
+		老师： <select v-model='params.teacher'><option v-for='item of teachers' value="{{item.uid}}">{{item.name}}</option></select>
+	</div>
+
+	<div class="row">
+		<div class="col-md-6">
+			<h-timetable :teacher="params.teacher"></h-timetable>
+		</div>
+		<div class="col-md-6">
+			<h-timepanel :teacher="params.teacher"></h-timepanel>
+		</div>
+	</div>
+</section>

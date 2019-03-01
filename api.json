@@ -1,0 +1,34 @@
+/*
+	老师日历-查询get： /admin/tcalender_list/uid/75/sdate/20150501/edate/20150531
+
+*/
+
+/*
+	老师日历-批量新增和修改post : /admin/tcalender/uid/75
+	data:
+		[
+			{
+				"date_unit": 2,
+				"date_str": "1,2",
+				"stime":"10:30",
+				"etime":"11:30",
+				"calender_state":1,
+				"remark":"My test from zhengbin",
+				"sdate":"",
+				"edate":""
+			 },
+
+			{
+				"sn":212,
+			 	"date_str": "4,5"
+			 }
+		]
+
+*/
+
+/*
+		
+	老师日历-批量删除post：/basic/multidel/table/lw_teacher_calender/id_field/teacher_calender_sn
+	data : [sn1,sn2]
+
+*/

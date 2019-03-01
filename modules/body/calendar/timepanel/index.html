@@ -1,0 +1,45 @@
+<sectione class="timepanel">
+	<div class="panel panel-info">
+		<div class="panel-heading text-center">{{days}} {{week}}</div>
+		<div class="panel-body">
+			<template v-if="fetching">
+				<p class="text-center">加载中...</p></template>
+			<template v-else>
+				<ul class="list">
+					<template v-if='lists&&lists.length'>
+						<li v-for='item in lists' class='row' :class="item | getItemClassStritem">
+							<div class="col-md-8">
+								<p v-if='item.editing'>
+									<select v-model='item.stime'>
+										<option v-for='time in times' :value='time'>{{time}}</option>
+									</select>
+									-
+									<select v-model='item.etime'>
+										<option v-for='time in times' :value='time'>{{time}}</option>
+									</select>
+								</p>
+								<span v-else>{{item.stime}}-{{item.etime}}</span>
+							</div>
+
+
+							<div class="col-md-4" v-if='!item.isExpired '>
+								<p v-if='!item.editing'>
+									<!-- <button class="btn btn-warning" @click='edit(item)'>Modify</button> -->
+									<button class="btn btn-danger" @click='remove(item)'>Delete</button>
+								</p>
+								<p v-else>
+									<button class="btn btn-success" @click='save(item)'>Save</button>
+									<button class="btn btn-danger" @click='cancel(item)'>Cancel</button>
+								</p>
+							</div>
+						</li>
+					</template>
+					<li class='noList' v-else >None</li>
+				</ul>
+			</template>
+		</div>
+		<div class="panel-footer">
+			<button class='btn btn-info' :class="isExpired ? 'disable' : ''" @click='create'>Add</button>
+		</div>
+	</div>
+</sectione>

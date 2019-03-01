@@ -1,0 +1,49 @@
+<div class="teacher_show">
+	<div class="panel panel-danger">
+	  	<div class="panel-heading text-center row">
+	  		<p class="col-md-4 text-center col-md-offset-4">
+	  			<span v-if='student.name'>学生{{student.name}}的老师</span>
+	  			<span v-else>请选择学生</span>
+	  		</p>
+	  		<p class="col-md-4 text-right pull-right">
+	  			<button class="btn btn-success" v-if='student.name' @click='open'>添加老师</button>
+	  		</p>
+	  	</div>
+	
+		<div class="panel-body">
+		  	<table class="table table-bordered">
+				<thead>
+					<tr class='warning'>
+						<th v-for='item of headers'>{{item}}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<template v-if='!loading'>
+						<template v-if='lists.length'>
+							<tr v-for="item in lists | orderBy 'idx' " >
+								<td>{{item.username}}</td>
+								<td>{{levels[item.idx -1]}}</td>
+								<td>{{item.w_experience}}</td>
+								<td>{{item.w_state}}</td>
+								<td>{{item.w_remark || '无'}}</td>
+								<td>
+									<span @click='remove(item)'>删除</span>
+								</td>
+							</tr>
+						</template>
+						<template v-else>
+							<tr class='empty'>
+								<td colspan="7">
+									<span v-if='student.name' @click='open'>该学生没有安排老师</span>
+								</td>
+							</tr>
+						</template>
+					</template>
+					<tr class="loading" v-else>
+						<td colspan='7'>正在获取老师列表...</td>
+					</tr>
+				</tbody>
+		  	</table>
+		</div>
+	</div>
+</div>

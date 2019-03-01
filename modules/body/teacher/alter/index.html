@@ -1,0 +1,84 @@
+<div class="md-modal md-effect-7" id='teacher_alter'>
+
+	<div class="md-content">
+		<h3>
+			学生{{student.name}}安排老师
+			<span class='glyphicon glyphicon-remove' @click='close'></span>
+		</h3>
+		
+		<div class="row body clearfix">
+			<!-- 老师的学生 -->
+			<div class="col-md-8">
+				<div class='wrap wrap1'>
+					<template v-if='teacher && teacher.uid'>
+						<h4>{{teacher.name}}的学生</h4>
+						<table class='table table-bordered'>
+							<thead>
+								<tr>
+									<th>学生姓名</th>
+									<th>课程期限</th>
+									<th>老师级别</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<template v-if='loading'>
+									<tr class='empty'>
+										<td colspan="4">正在获取数据...</td>
+									</tr>		
+								</template>
+								<template v-else>
+									<template v-if='lists.length'>
+										<tr v-for='item of lists'>
+											<td>{{item.username}}</td>
+											<td>{{item.duration_str | format}}</td>
+											<td>{{levels[item.idx-1]}}</td>
+											<td class=>
+												<span @click='remove(item)'>删除</span>
+											</td>
+										</tr>
+									</template>
+									<template v-else>
+										<tr class='empty'>
+											<td colspan="4">该老师还没有学生</td>
+										</tr>
+									</template>
+								</template>
+							</tbody>
+						</table>
+					</template>
+				</div>
+			</div>
+			<!-- 选择老师 -->
+			<div class="col-md-4">
+				<div class='wrap wrap2'>
+					<div>
+						<h5>选择老师</h5>
+						<select v-model='select'>
+							<option value="">--选择老师--</option>
+							<option v-for='item in teachers' :value='item.uid'>{{item.name}}</option>
+						</select>
+					</div>
+					<div>
+						<h5>选择类型</h5>
+						<select v-model='type'>
+							<option value="1">主课老师</option>
+							<option value="2">一级代课老师</option>
+							<option value="3">二级代课老师</option>
+						</select>
+					</div>
+					<div>
+						<button class="btn btn-info" v-if='adding'>正在发送数据...</button>
+						<button class="btn btn-info" @click='add' v-else>添加</button>
+					</div>
+
+				</div>
+			</div>		
+		</div>
+
+		<div class='backBox'>
+			<button class='btn btn-default' @click='close'>返回</button>
+		</div>
+	</div>
+</div>

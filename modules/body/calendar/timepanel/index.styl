@@ -1,0 +1,54 @@
+.timepanel
+	height 300px
+	.panel
+		margin-bottom 0px
+	.panel-heading
+		height 40px
+		line-height 40px
+		padding 0px
+	.panel-body
+		height 284px
+		padding 5px 7px
+		overflow-y auto
+		overflow-x hidden
+		.list
+			li
+				border-bottom 1px dashed #ccc
+				padding 6px 20px
+				.btn
+					padding 2px 5px
+					margin-right 5px
+					font-size 12px
+					&:last-child
+						margin-right auto
+				>div
+					padding 0px 5px
+					span.offline
+						color #fa787d
+				p
+					margin 0px
+				select
+					width 80px
+					font-size 13px
+					padding 3px 10px
+					color #444
+					border 1px solid #eee
+					outline none
+					border-radius 3px
+				&.noList
+					border none
+					text-align center
+				&.expired
+					div
+						color #888
+	.panel-footer
+		height 40px
+		line-height 35px
+		padding 0px
+		margin 0px
+		.btn
+			margin-left 10px
+			padding 4px 15px
+			font-size 13px
+			&.disable
+				display none

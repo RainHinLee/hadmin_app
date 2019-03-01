@@ -1,0 +1,70 @@
+<div class="schedule planBox">
+	<div class="searchBox">
+		<p>
+			上课时间： <input type="date" v-model='options.sdate'/> - <input type="date" v-model='options.edate'/> 
+			老师： <select v-model='options.teacher'><option v-for='item of teachers' value="{{item.uid}}">{{item.name}}</option></select>
+			学生: <h-select-students :selected="hselect_selected"></h-select-students>
+			公司： <select v-model='options.company'><option v-for='item of companys' value="{{item.organ_id}}">{{item.organ_id}} - {{item.organ_name}}</option></select>
+		</p>
+
+		<p>
+			类型：<select v-model='options.level'><option v-for='(key,item) of levels' value="{{key}}">{{item}}</option></select>		 
+			地点：<select v-model='options.way'><option v-for='(key,item) of ways' value="{{key}}">{{item}}</option></select> 
+			状态： <select v-model='options.status'><option v-for='(key,item) of status' value="{{key}}">{{item}}</option></select>
+			显示: <select v-model='options.showCancel'>
+						<option value="1">显示cancelled课</option>
+						<option value="0">不显示cancelled课</option>
+					</select>
+			<span class='btn btn-success' @click='add'>新增</span>
+		</p>
+	</div>
+	
+	<div class="resultBox">
+		<table class='table-bordered table-striped table'>
+			<thead>
+				<tr>
+					<th>时间</th>
+					<th>老师</th>
+					<th>学生</th>
+					<th>类型</th>
+					<th>人数</th>
+					<th>地点</th>
+					<th>课时数</th>
+					<th>公司</th>
+					<th>状态</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<template v-if='fetched'>
+					<tr >
+						<td class='empty' colspan="10">获取数据中...</td>
+					</tr>
+					
+				</template>
+				<template v-else>
+					<template v-if="records.length">
+						<tr v-for='(index,item) in records'>
+							<td>{{item.class_datetime}}</td>
+							<td>{{item.teacher_name}}</td>
+							<td>{{item.username_str}}</td>
+							<td>{{item.course_level | getLevelStr}}</td>
+							<td>{{item.class_limit | getLimitStr}}</td>
+							<td>{{item.course_way | getWayStr}}</td>
+							<td>{{item.lesson_num}}</td>
+							<td>{{item.book_list[0] && item.book_list[0].organ_id}}</td>
+							<td>{{item.timetable_state | getStatusStr}}</td>
+							<td><span @click='modify(item)'>修改</span></td>
+						</tr>
+					</template>
+					<template v-else>
+						<tr >
+							<td class='empty' colspan="10">无数据</td>
+						</tr>					
+					</template>
+				</template>
+			</tbody>
+		</table>
+	</div>
+</div>
+

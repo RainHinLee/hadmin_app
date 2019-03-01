@@ -1,0 +1,1 @@
+export default new window.ModalEffects('#classroom_alter')

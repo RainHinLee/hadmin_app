@@ -1,0 +1,9 @@
+<aside id='aside' v-bind:style="{height: height+'px'}">
+	<h1>Hanbridgemandarin</h1>
+	<ul>
+		<li v-for='label of labels' v-link="label.link">
+			<span class='glyphicon' :class='label.icon'></span> 
+			<a>{{label.name}}</a>
+		</li>
+	</ul>
+</aside>

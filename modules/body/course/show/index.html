@@ -1,0 +1,59 @@
+<div class="course_show">
+	<div>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>课程日期</th>
+					<th>课程期限</th>
+					<th>总课时</th>
+					<th>已上课</th>
+					<th>课程计划</th>
+					<th>课程规则</th>
+					<th>课程状态</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<template  v-if='fetching'>
+					<tr class='empty'>
+						<td colspan="9">正在获取数据...</td>
+					</tr>
+				</template>
+				<template v-else>
+					<template v-if='lists && lists.length'>
+						<tr v-for='item of lists'>
+							<td>
+								{{item.sdate}} 
+								 / 
+								 {{item.edate}}
+							</td>
+							<td>{{item | limit}}</td>
+							<td>{{item.lesson_num}} Lessons</td>
+							<td>{{item.finish_num | finishNum item.frozen_num}} lessons</td>
+							<template v-if="item.lesson_unitnum =='0'">
+								<td> 无限制 </td>
+							</template>
+							<template v-else>
+								<td>{{item.lesson_unitnum}} Lessons  / {{item.lesson_timeunitS}}</td>
+							</template>
+							
+							<td>{{item.rules}}</td>
+							<td>{{item.usable_stateS}}</td>
+							<td>
+								<span @click="show(item,'editor')">详情</span>
+								<span @click="show(item,'vacation')">休学</span>
+							</td>
+						</tr>
+					</template>
+					<template v-else>
+						<tr class='empty'>
+							<td colspan="9" v-if='student.uid'>	
+								学生${current.username}还没有课程
+							</td>
+						</tr>
+					</template>
+				</template>
+			</tbody>	
+		</table>
+	</div>
+</div>

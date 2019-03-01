@@ -1,0 +1,23 @@
+<header id='header'>
+	<div class="row">
+		<div class="col-md-9 ">
+			<template v-if='labels | hasKeys'>
+				<ul class="nav nav-tabs">
+				  	<li v-for="(lable,url) in labels" v-link="url" >
+				  		<a href="">{{lable}}</a>
+				  	</li>
+				</ul>
+			</template>
+		</div>
+		
+		<div class="col-md-3 pull-right userBox text-right">
+			<a>
+				<span class='glyphicon glyphicon-user'></span>
+				<i>{{user.name}}</i>
+			</a>
+			<a class='logout' href='_domain/user/logout'>
+				<span class='glyphicon glyphicon-off'></span>
+			</a>
+		</div>
+	</div>
+</header>

@@ -1,0 +1,294 @@
+<div class="md-modal md-effect-7"  id="course_alter">
+	<div class="md-content">
+		<h3>
+			学生{{current.username}}的课程信息
+			<span class="glyphicon glyphicon-remove" @click='close'></span>
+		</h3>
+		
+		<div class='row md-body'>
+			<div class="col-md-6">
+				<h5>课程信息</h5>
+				<table class="table table-bordered">
+					<tbody>
+
+						 <tr>
+						 	<td class="key">课程类型</td>
+							<!--<td class='value' @dblclick="edit('lesson_typeS',true)" v-else>
+								{{current.lesson_typeS}}
+							</td>-->
+							
+							<td class="value" @keyup.enter='save' v-if="option=='course_level'">
+								<select v-model='current.course_level'>
+									<option value="1">General</option>
+									<option value="4">Special</option>
+									<option value="2">Trial</option>
+								</select>
+							
+								<select :value='current.class_limit' v-model='current.class_limit' class='md'>
+									<option value="0">Group</option>
+									<option value="1">Private</option>
+									<option value="2">1-On-2 </option>
+									<option value="3">1-On-3 </option>
+									<option value="4">1-On-4</option>
+									<option value="8">1-On-8</option>
+									<option value="12">1-On-12</option>
+									<option value="20">1-On-20</option>
+								</select>
+									
+								<button class="btn" v-if='modifing'>保存中..</button>
+								<button class="btn" @click='save' v-else>完成</button>
+							</td>
+
+						 	<td class="value" @dblclick="edit('course_level')" v-else>
+						 		{{current.lesson_typeS}}
+						 	</td>
+						 </tr>
+
+						 <tr>
+						 	<td class="key">课程期限</td>
+							<td class="value" @keyup.enter='save' v-if="option=='limit_timelen'">
+								<input type="text" v-model='current.limit_timelen'>
+								<select v-model='current.limit_timeunit'>
+									<option value="1">day</option>
+									<option value="4">week</option>
+									<option value="2">month</option>
+									<option value="3">year</option>
+								</select>
+
+								<button class="btn" v-if='modifing'>保存中..</button>
+								<button class="btn" @click='save' v-else>完成</button>
+							</td>
+
+						 	<td class="value" @dblclick="edit('limit_timelen')" v-else>
+						 		{{current.limit_timelenS}}
+						 	</td>
+						 </tr>
+
+					 	<tr>
+						 	<td class="key">奖励期限</td>
+							<td class="value" v-if="option=='extra_timelen'">
+								<input type="text"  v-model='current.extra_timelen'>
+								<select v-model='current.extra_timeunit'>
+									<option value="1">day</option>
+									<option value="4">week</option>
+									<option value="2">month</option>
+									<option value="3">year</option>
+								</select>
+
+								<button class="btn" v-if='modifing'>保存中..</button>
+								<button class="btn" @click='save' v-else>完成</button>
+							</td>
+						 	<td class="value" @dblclick="edit('extra_timelen')" v-else>
+						 		{{current.extra_timelen}} {{current.extra_timeunitS}}
+						 	</td>
+						 </tr>
+
+					 	<tr>
+						 	<td class="key">课程计划</td>
+						 	<!-- 编辑模式 -->
+						 	<template v-if="option=='lesson_unitnum'">
+								<td class="value" >
+									<input type="text" v-model='current.lesson_unitnum'>
+									<span>Lessons / {{current.lesson_timeunitS || ''}}</span>
+
+									<button class="btn" v-if='modifing'>保存中..</button>
+									<button class="btn" @click='save' v-else>完成</button>
+								</td>
+						 	</template>
+							
+							<!-- 显示模式 -->
+						 	<template v-else>
+								<!-- 无限制不可更改课程计划 -->
+								<template  v-if='current.lesson_unitnum==0'>
+								 	<td class="value" @dblclick="edit('lesson_unitnum',true)">
+										无限制
+								 	</td>
+								</template>
+
+								<template v-else>
+								 	<td class="value" @dblclick="edit('lesson_unitnum')">
+										{{current.lesson_unitnum}} Lessons / {{current.lesson_timeunitS || ''}}
+								 	</td>
+								</template>
+						 	</template>
+						 </tr>
+
+						 <tr>
+						 	<td class="key">总课时</td>
+						 	<!-- 编辑模式，只在定课计划为无限制时可编辑 -->
+							<template v-if="option=='lesson_num'">
+								<td class='value'>
+									<input type="text" v-model='current.lesson_num'> Lessons	
+
+									<button class="btn" v-if='modifing'>保存中..</button>
+									<button class="btn" @click='save' v-else>完成</button>		
+								</td>
+							</template>
+							<template v-else>
+								<template v-if='current.lesson_unitnum==0'>
+									<td class='value' @dblclick="edit('lesson_num')">
+										{{current.lesson_num}} Lessons
+									</td>									
+								</template>
+								<template v-else>
+									<td class='value' @dblclick="edit('lesson_num',true)">
+										{{current.lesson_num}} Lessons
+									</td>									
+								</template>
+							</template>						 		
+						 </tr>
+
+						 <tr>
+						 	<td class="key">开始日期</td>
+							<td class="value" v-if="option=='sdate'">
+								<input type="date"  v-model='current.sdate'>
+								<button class="btn" v-if='modifing'>保存中..</button>
+								<button class="btn" @click='save' v-else>完成</button>	
+							</td>
+
+						 	<td class="value" @dblclick="edit('sdate')" v-else>
+						 		{{current.sdate}}				 		
+						 	</td>						 	
+						 </tr>
+
+						 <tr>
+						 	<td class="key">结束日期</td>
+
+						 	<td class="value" @dblclick="edit('edate',true)">
+						 		{{current.edate}}
+						 	</td>	
+						 </tr>
+
+						 <tr>
+						 	<td class="key">剩余时间</td>
+						 	<td class="value" @dblclick="edit('left_limit_days',true)">{{current.left_limit_days}} days</td>
+						 </tr>
+
+						 <tr>
+						 	<td class="key">已上课时</td>
+
+						 	<td class="value" @dblclick="edit('finish_num',true)">
+						 		{{current.finish_num | finishNum current.frozen_num}} lessons
+						 	</td>
+						 </tr>
+
+						 <tr>
+						 	<td class="key">冻结课时</td>
+						 	<td class="value" @dblclick="edit('frozen_num',true)">{{current.frozen_num}} lessons</td>
+						 </tr>
+
+						 <tr>
+						 	<td class="key">定课规则</td>
+							
+							<td class="value rules" v-if="option=='rules'">
+								<input type="text"  v-model='current.lesson_num_day'>
+								<span> Lessons/day </span>
+								<select v-model='current.lesson_days_week'>
+									<option value="7">Any day</option>
+									<option value="5">Weekday</option>
+								</select>
+								<button class="btn" v-if='modifing'>保存中..</button>
+								<button class="btn" @click='save' v-else>完成</button>	
+							</td>
+						 	<td class="value" @dblclick="edit('rules')" v-else>{{current.rules}}</td>
+						 </tr>
+
+						 <tr>
+						 	<td class="key">课程状态</td>
+							<td class="value" v-if="option=='usable_state'">
+								<select v-model='current.usable_state'>
+									<option value="1">prepare</option>
+									<option value="2">normal</option>
+									<option value="3">closed</option>
+									<option value="4">frozen</option>
+								</select>
+								<button class="btn" v-if='modifing'>保存中..</button>
+								<button class="btn" @click='save' v-else>完成</button>	
+							</td>
+						 	<td class="value" @dblclick="edit('usable_state')" v-else>{{current.usable_stateS}}</td>
+						 </tr>
+					</tbody>
+
+				</table>
+			</div>
+			<div class="col-md-6">
+				<h5>休学信息</h5>
+				<table class="table table-bordered">
+					<tbody>
+						<tr>
+							<td class="key">休学期限</td>
+
+							<td class="value" v-if="option=='off_timelen'">
+								<input type="text" v-model='current.off_timelen'>
+								<select v-model="current.off_timeunit">
+									<option value="1">day</option>
+									<option value="4">week</option>
+									<option value="2">month</option>
+									<option value="3">year</option>		
+								</select>
+								<button class="btn" v-if='modifing'>保存中..</button>
+								<button class="btn" @click='save' v-else>完成</button>	
+							</td>
+							<td class="value" @dblclick="edit('off_timelen')" v-else>
+								{{current.off_timelenS || '无'}}
+							</td>
+						</tr>
+						<tr>
+							<td class="key">奖励休学</td>
+							<td class="value" v-if="option=='extra_off_timelen'">
+								<input type="text" v-model='current.extra_off_timelen'>
+								<select v-model="current.extra_off_timeunit">
+									<option value="1">day</option>
+									<option value="4">week</option>
+									<option value="2">month</option>
+									<option value="3">year</option>		
+								</select>
+								<button class="btn" v-if='modifing'>保存中..</button>
+								<button class="btn" @click='save' v-else>完成</button>	
+							</td>
+
+							<td class="value" @dblclick="edit('extra_off_timelen')" v-else>{{current.extra_off_timelenS || '无'}}</td>
+						</tr>
+						<tr>
+							<td class="key">已休学</td>
+
+							<td class="value" v-if="option=='finish_off_days'">
+								<input type="text" v-model='current.finish_off_days'>
+								<span> days </span>
+								<button class="btn" v-if='modifing'>保存中..</button>
+								<button class="btn" @click='save' v-else>完成</button>	
+							</td>
+
+							<td class="value" @dblclick="edit('finish_off_days')" v-else>{{current.finish_off_days}} days</td>
+						</tr>
+						<tr>
+							<td class="key">剩余休学</td>
+							<td class="value" @dblclick="edit('limit',true)">{{limit}} days</td>
+						</tr>
+						<tr>
+							<td class="key">是否休学中</td>
+							<td class="value" @dblclick="edit('cur_off_sdate',true)">{{current.cur_off_days>0 ? '是' : '否'}}</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class='intro'>
+					<p>
+						<span class='glyphicon glyphicon-star'></span>
+						如需编辑信息，请双击相应单元格
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- 两次修改的数据接口： 
+
+192.168.1.110/devapi/admin/product_user/product_user_sn/93 { lesson_unitnum: '3', lesson_timeunit: '4' }
+
+192.168.1.110/devapi/admin/product_user/product_user_sn/93 { lesson_unitnum: '2', lesson_timeunit: '4' }
+
+-->
+
+

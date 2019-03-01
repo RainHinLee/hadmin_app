@@ -1,0 +1,98 @@
+<div class="md-modal md-effect-7" id='schedule_plan_alter'>
+
+	<!--新增-->
+		<div class="md-content">
+			<template v-if='type=="add"'>
+				<h3>增加排课 <span class='glyphicon glyphicon-remove' @click='close'></span></h3>		
+				
+				<div class="body row">
+					<p><span>日期： </span><input type="date" v-model='options.course_date' /></p>
+					<p><span>时间：</span><input type="time" v-model='options.course_time'/></p>
+					<p><span>类型：</span><select v-model='options.course_level'><option v-for='(key,item) of levels' value="{{key}}">{{item}}</option></select></p>
+					<p><span>人数: </span><select v-model='options.class_limit'><option v-for='(key,item) of limits' value="{{key}}">{{item}}</option></select></p>
+					<p><span>老师：</span><select v-model='options.teacher'><option v-for='item of teachers' value="{{item.uid}}">{{item.name}}</option></select></p>
+					<p><span>学生: </span><h-select-students :selected="hselect_selected"></h-select-students></p>
+					<p><span>地点：</span><select v-model='options.course_way'><option v-for='(key,item) of ways' value="{{key}}">{{item}}</option></select></p>
+					<p><span>课数：</span><input type="number" v-model='options.lesson_num' /></p>
+				</div>
+				
+				<div class='backBox text-center'>
+					<template v-if='submiting'>
+						<span class='btn btn-danger'>正在提交...</span>
+					</template>
+					<template v-else>
+						<span class='btn btn-default' @click='close'>取消</span>
+						<span class='btn btn-danger' @click='submit'>提交</span>
+					</template>
+				</div>
+			</template>
+			
+			<!--修改-->
+			<template v-if='type=="update"'>
+				<h3>修改课表({{updates.username_str}}) <span class='glyphicon glyphicon-remove' @click='close'></span></h3>		
+				
+				<div class="body row">
+					<p><span>日期： </span><input type="date" v-model='updates.course_date' /></p>
+					<p><span>时间：</span><input type="time" v-model='updates.course_time'/></p>
+					<p><span>类型：</span><select v-model='updates.course_level'><option v-for='(key,item) of levels' value="{{key}}">{{item}}</option></select></p>
+					<p><span>人数: </span><select v-model='updates.class_limit'><option v-for='(key,item) of limits' value="{{key}}">{{item}}</option></select></p>
+					<p><span>老师：</span><select v-model='updates.teacher_uid'><option v-for='item of teachers' value="{{item.uid}}">{{item.name}}</option></select></p>
+					<p><span>地点：</span><select v-model='updates.course_way'><option v-for='(key,item) of ways' value="{{key}}">{{item}}</option></select></p>
+					<p><span>课数：</span><input type="number" v-model='updates.lesson_num' /></p>
+					<p><span>状态：</span><select v-model='updates.timetable_state'><option v-for='(key,item) of status' value="{{key}}">{{item}}</option></select></p>
+				</div>
+				
+				<div class='backBox text-center'>
+					<template v-if='submiting'>
+						<span class='btn btn-danger'>正在提交...</span>
+					</template>
+					<template v-else>
+						<span class='btn btn-default' @click='type="view"'>取消</span>
+						<span class='btn btn-danger' @click='update'>提交</span>
+					</template>
+				</div>		
+			</template>
+			
+			
+			<!--查看-->
+			<template v-if='type=="view"'>
+				<h3>查看课表({{course.username_str}}) <span class='glyphicon glyphicon-remove' @click='close'></span></h3>		
+				
+				<div class="body row">
+					<table class='table-bordered table-striped table'>
+						<thead>
+							<tr>
+								<th>时间</th>
+								<th>老师</th>
+								<th>学生</th>
+								<th>类型</th>
+								<th>人数</th>
+								<th>地点</th>
+								<th>课时数</th>
+								<th>状态</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>{{course.class_datetime}}</td>
+								<td>{{course.teacher_name}}</td>
+								<td>{{course.username_str}}</td>
+								<td>{{course.course_level | getLevelStr}}</td>
+								<td>{{course.class_limit | getLimitStr}}</td>
+								<td>{{course.course_way | getWayStr}}</td>
+								<td>{{course.lesson_num}}</td>
+								<td>{{course.timetable_state | getStatusStr}}</td>
+								<td><span @click='modify(course)'>修改</span></td>
+							</tr>
+						</tbody>
+					</table>					
+				</div>
+
+				<div class='backBox text-center'>
+					<span class='btn btn-default' @click='close'>返回</span>
+				</div>		
+			</template>			
+		</div>
+	
+</div>

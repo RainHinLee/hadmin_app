@@ -1,0 +1,53 @@
+<div class="md-modal md-effect-7" id='history_alter'>
+
+	<div class="md-content">
+		<h3>
+			Record Course
+			<span class='glyphicon glyphicon-remove' @click='close'></span>
+		</h3>
+		
+		<div class="row body clearfix">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Student</th>
+						<th>Date</th>
+						<th>State</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					<tr v-for='item of course.book_list'>
+						<td>{{item.student_name}}</td>
+						<td>{{course.class_datetime}}</td>
+						<td>{{item.timetable_user_stateS}} / {{item.timetable_user_state | transform}}</td>
+						<td>
+							<template v-if='item.modifing'>
+								Processing...
+							</template>
+
+							<template v-else>
+								<template v-if='item.timetable_user_state==1'> 
+									<span class='btn btn-info' @click='modify(item,3)'>Ok</span>
+									&nbsp;
+									<span class='btn btn-warning' @click='modify(item,4)'>Absent</span>	
+								</template>
+								<template v-else>
+									<span class='btn btn-default' v-if='item.timetable_user_state>=3' @click='modify(item,1)'>
+										Cancel
+									</span>
+								</template>
+							</template>
+
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class='backBox'>
+			<button class='btn btn-default' @click='close'>Back</button>
+		</div>
+	</div>
+</div>

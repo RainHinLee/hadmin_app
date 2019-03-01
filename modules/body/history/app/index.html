@@ -1,0 +1,83 @@
+<div class="history">
+	<!-- 搜索列表 -->
+	<div class="search">
+		<label for="">Student
+			<select v-model='search.uid'>
+				<option value="">--select--</option>
+				<option value="">All</option>
+				<option v-for='item in students' :value="item.uid">{{item.name}}</option>
+			</select>
+		</label>
+
+		<label for="">Start
+			<input type="date" v-model = 'search.sdate' :value='search.sdate'>
+		</label>
+
+		<label for="">End
+			<input type="date" v-model = 'search.edate' :value='search.edate'>
+		</label>						
+	</div>
+
+	<!-- 内容显示 -->
+	<div class="body">
+		<table class='table table-bordered'>
+			<thead>
+				<tr>
+					<th>Time</th>
+					<th>Type</th>
+					<th>Student</th>
+					<th>State</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+					<template v-if='fetching'>
+						<tr class="empty">
+							<td colspan="7">Loading...</td>
+						</tr>
+					</template>
+
+					<template v-else>
+						<template v-if='lists.length'>
+							<tr v-for='item of lists' :class='item | f_getStyles'>
+								<td>{{item.class_datetime}}</td>
+								<td>{{item.access_typeS}} Class</td>
+								<td>{{item.username_str}}</td>s
+								<td>
+									{{item.timetable_stateS}} / {{item.timetable_state | f_transform }}
+								</td>
+								
+								<template v-if='item | f_isEnd'>
+									<!--课程结束了-->					
+									<td v-if='item | f_isActionType'>
+										<a class='btn' @click='record(item)'>Record</a>
+									</td>
+									<td v-else></td>
+								</template>
+
+								<template v-else>
+									<td v-if='item | f_isStarting'>
+										<a class='btn' @click='record(item)'>Record</a>
+									</td>
+									
+									<td v-else>wait</td>
+								</template>
+							</tr>
+						</template>
+
+						<template v-else>
+								<tr class="empty">
+									<td colspan="7">None</td>
+								</tr>						
+						</template>
+
+				</template>
+
+			</tbody>
+		</table>
+	</div>
+</div>
+
+
+
+

@@ -1,0 +1,98 @@
+<div class='schedule timetableBox'>
+	<div class="searchBox">
+		<p>
+			
+			<span>老师：</span> <select v-model='params.teacherId'><option v-for='item of teachers' value="{{item.uid}}">{{item.name}}</option></select>
+			<span>学生：</span> <h-select-students :selected="hselect_selected"></h-select-students>
+			<span>显示:</span> <select v-model='params.showCancel'>
+						<option value="1">显示cancelled课</option>
+						<option value="0">不显示cancelled课</option>
+					</select>
+			<span class='btn btn-danger' @click='add'>新增</span>
+		</p>
+	</div>
+	
+	<div class="resultBox">
+		<div class="row">
+			<div class="col-md-6 calendar">
+				<div class="panel panel-danger">
+					<div class="panel-heading clearfix">
+						<div class="col-md-2 text-center prev" @click='prev'>
+							<span class='glyphicon glyphicon-hand-left'></span>
+						</div>
+						<div class="col-md-8 text-center">{{current | getMonthStr}}</div>
+						<div class="col-md-2 text-center next" @click='next'>
+							<span class='glyphicon glyphicon-hand-right'></span>
+						</div>
+					</div>
+			
+					<div class="panel-body">
+						<table class="table table-bordered">
+							<thead>
+								<tr><td v-for='week of weeks'>{{week}}</td></tr>
+							</thead>
+							
+							<tbody>
+								<tr v-for='day of calendar'>
+									<td v-for='item of day' track-by='$index' :class='item | getItemstate' :data-index='item' @click="click($event)">
+										<span>{{item || ''}}</span>
+										<span v-if='courses[item] && courses[item].length' class='busy'>
+											{{courses[item].length}}
+										</span>	
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>	
+				</div>
+			</div>
+			
+			<div class="col-md-6 calendarTable">
+				<div class="panel panel-info">
+					<div class="panel-heading clearfix text-center" style='height:40px'>{{current | getDayStr}}</div>
+			
+					<div class="panel-body">
+						<table class='table table-bordered'>
+							<thead><tr>
+								<th>时间</th>
+								<th>老师</th>
+								<th>学生</th>
+								<th>状态</th>
+								<th>操作</th>
+							</tr></thead>
+							
+							<tbody>
+								<template v-if='fetching'>
+									<tr><td colspan="5" class='empty'>正在请求...</td></tr>
+								</template>
+								
+								<template v-else>
+									
+									<template v-if='shows.length'>
+										<tr v-for='(key,value) in shows' :class="value | getClassStr">
+											<td>{{value.class_time}}</td>
+											<td>{{value.teacher_name}}</td>
+											<td>{{value.username_str}}</td>
+											<td>{{value.timetable_stateS}}</td>
+											<td><span @click='view(value)'>详情</span></td>
+										</tr>
+									</template>
+									<template v-else>
+										<tr>
+											<td colspan="5" class='empty'>无数据</td>
+										</tr>
+									</template>
+									
+								</template>
+								
+							</tbody>
+						</table>
+					</div>	
+				</div>
+			</div>			
+			
+		</div>		
+		
+	</div>
+	
+</div>

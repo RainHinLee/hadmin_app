@@ -1,0 +1,22 @@
+<div class='_hselect'>
+	<input v-model='text' type="text" @focus='focus' @blur="blur" placeholder="字数>=3" />
+	<ul :class='classname' >
+		<template v-if='lists.length'>
+			<li v-else v-for= '(index,item) in lists' @click='click(index)' :class='item | getClassStr'>{{item | getValueStr}}</li>
+		</template>
+		
+		<template v-else>
+			<template v-if='text.length>=3'>
+				<li class='text-center' v-if='fetching'>正在搜索..</li>
+				<li class='text-center' v-else>没有相关数据</li>
+			</template>
+			<template v-else>
+				<li class='text-center' v-else>查询字数少于3</li>
+			</template>
+			
+		</template>
+	</ul>
+</div>
+
+
+

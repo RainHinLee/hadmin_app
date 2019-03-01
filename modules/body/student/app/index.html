@@ -1,0 +1,51 @@
+<div class="body_student">
+	<div class="search">
+		<input placeholder="Student" :value='searchName' v-model='searchName'>
+		<button class="btn btn-success" @click='search'>Search</button>
+	</div>
+
+	<div>
+		<table class="table table-bordered table-stripe">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Register Date</th>
+						<th>Course Date</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				
+				<tbody>
+					<template v-if='fetching'>
+						<tr class='empty'>
+							<td colspan="6">Procrssing...</td>
+						</tr>
+					</template>
+					<template v-else>
+						<template v-if='lists.length'>
+							<tr v-for='list of lists'>
+								<td>{{list.username}}</td>
+								<td>{{list.regdate}}</td>
+								<td>{{list.duration_str | format}}</td>
+								<td>
+								<a href="http://www.hanbridgemandarin.com/school/my/course/learning-report/{{list.uid}}" class='btn btn-info' target='_blank'>Progress</a></td>
+							</tr>						
+						</template>
+
+						<template v-else>
+							<tr class='empty'>
+								<td colspan="6">None</td>
+							</tr>
+						</template>						
+					</template>
+				</tbody>
+		</table>
+	</div>		
+</div>
+
+
+
+
+
+
+

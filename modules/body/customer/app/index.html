@@ -1,0 +1,606 @@
+<div class="customer">
+
+	<template v-if='fetching'>
+		<div class="empty">
+			正在请求数据...
+		</div>
+	</template>
+	<template v-else>
+		<div class="row">
+			<div class="base col-md-6">
+				<table class="table table-bordered">
+					<tbody>
+						<tr class="success">
+							<td colspan="2"><h3>基本信息1:</h3></td>
+						</tr>
+						<!-- 学习包名 -->
+						<tr>
+							<td>Package Name</td>
+
+							<template v-if="keys=='package.package_name'">
+								<!-- 保存状态 -->
+								<td v-if='saving'>
+									<span>{{package.package_name}}</span>
+									<button class="btn btn-danger">正在保存...</button>
+								</td>
+								<!-- 编辑状态 -->
+								<td v-else>
+									<input type="text" :value='package.package_name' v-model='package.package_name'>
+									<button class="btn btn-success" @click='save'>保存</button>
+								</td>
+							</template>
+							<template v-else>
+								<td @dblclick="modify('package','package_name')">{{package.package_name}}</td>
+							</template>
+						</tr>
+						<!-- 类型 -->
+						<tr>
+							<td>Course Level</td>
+							<template v-if="keys=='inward.course_level'">
+								<td v-if='saving'>
+									<span>
+									{{inward.course_level | level}} {{inward.class_limit| limit}}</span>
+									<button class="btn btn-danger">正在保存...</button>
+								</td>
+								<td v-else>
+									<select :value='inward.course_level' v-model='inward.course_level' class='md'>
+										<option value="1">General</option>
+										<option value="2">Special</option>
+										<option value="3">Trial</option>
+									</select>
+
+									<select :value='inward.class_limit' v-model='inward.class_limit' class='md'>
+										<option value="0">Group</option>
+										<option value="1">Private</option>
+										<option value="2">1-On-2 </option>
+										<option value="3">1-On-3 </option>
+										<option value="4">1-On-4</option>
+										<option value="8">1-On-8</option>
+										<option value="12">1-On-12</option>
+										<option value="20">1-On-20</option>
+									</select>
+									<button class="btn btn-success" @click='save'>保存</button>
+								</td>	
+							</template>
+							<template v-else>
+								<td @dblclick="modify('inward','course_level')">{{inward.course_level | level}} {{inward.class_limit| limit}}</td>								
+							</template>
+						</tr>
+
+					<!-- 授课方式 -->
+<!-- 						<tr>
+							<td>Course Way</td>
+							<template v-if="keys=='inward.course_way'">
+								<td v-if='saving'>
+									<span>{{inward.course_way | way}}</span>
+									<button class="btn btn-danger">正在保存...</button>		
+								</td>
+								<td v-else>
+									<select :value='inward.course_way' v-model='inward.course_way'>
+										<option value="1">Online</option>
+										<option value="2">Oncampus</option>
+										<option value="3">Onsite</option>
+									</select>
+
+									<button class="btn btn-success" @click='save'>保存</button>
+								</td>
+							</template>
+							<template v-else>
+								<td @dblclick="modify('inward','course_way')">
+									{{inward.course_way | way}}
+								</td>
+							</template>
+						</tr> -->
+
+<!--						<tr>
+							<td>Course Type</td>
+
+							<template v-if="keys=='inward.course_type'">
+								<td v-if='saving'>
+									{{inward.course_type | type}}
+									<button class="btn btn-danger">正在保存...</button>		
+								</td>
+								<td v-else>
+									<select :value='inward.course_type' v-model='inward.course_type'>
+										<option value="2">teach</option>
+										<option value="3">coach</option>
+									</select>								
+									<button class="btn btn-success" @click='save'>保存</button>
+								</td>
+							</template>
+							<template v-else>
+								<td @dblclick="modify('inward','course_type')">
+									{{inward.course_type | type}}
+								</td>
+							</template>							
+
+						</tr>-->
+						
+						
+						<!-- 定课类型 -->
+						<tr>
+							<td>Schedule</td>
+							<template v-if="keys=='inward.lesson_num'">
+								<td v-if='saving'>
+									<span v-if="inward.lesson_timeunit>'0'">
+										{{inward.lesson_num}} lessons/
+										{{ inward.lesson_timeunit| timeunit}}
+									</span>
+									<span v-else>
+										{{inward.lesson_num}} lessons
+									</span>									
+									<button class="btn btn-danger">正在保存...</button>
+								</td>
+								<td v-else>
+									
+									<input type="text" class="xs" :value='inward.lesson_num' v-model='inward.lesson_num'> lessons
+
+									<select :value='inward.lesson_timeunit' v-model='inward.lesson_timeunit' class='xs'>
+										<option value="0">不限</option>
+										<option value="1">day</option>
+										<option value="2">month</option>
+										<option value="3">year </option>
+										<option value="4">week</option>
+									</select>
+									<button class="btn btn-success" @click='save'>保存</button>
+								</td>	
+							</template>
+							<template v-else>
+								<td @dblclick="modify('inward','lesson_num')" >
+									
+									<span v-if="inward.lesson_timeunit>'0'">
+										{{inward.lesson_num}} lessons/{{ inward.lesson_timeunit| timeunit}}
+									</span>
+									<span v-else>
+										{{inward.lesson_num}} lessons
+									</span>
+								</td>
+							</template>
+						</tr>
+						
+						<!-- 原价 -->
+						<tr>
+							<td>Price</td>
+							<template v-if="keys == 'package.list_price'">
+								<td v-if='saving'>
+									<span>
+										{{package.list_price | format}}
+									</span>									
+									<button class="btn btn-danger">正在保存...</button>		
+								</td>
+								<td v-else>
+									<input type="text" :value='package.list_price' v-model='package.list_price' class='md'> 实例:12345.60
+									<button class="btn btn-success" @click='save'>保存</button>
+								</td>
+
+							</template>
+							<template v-else>
+								<td @dblclick="modify('package','list_price')" >{{package.list_price | format}}</td>
+							</template>
+						</tr>
+
+						<!-- 推广价 -->
+						<tr>
+							<td>Promotion Price</td>
+							<template v-if="keys == 'package.promotion_price'">
+								<td v-if='saving'>
+									<span>
+										{{package.promotion_price | format}}
+									</span>									
+									<button class="btn btn-danger">正在保存...</button>		
+								</td>
+								<td v-else>
+									<input type="text" :value='package.promotion_price' v-model='package.promotion_price' class='md'> 实例:12345.60
+									<button class="btn btn-success" @click='save'>保存</button>
+								</td>
+
+							</template>
+							<template v-else>
+								<td @dblclick="modify('package','promotion_price')" >{{package.promotion_price | format}}</td>
+							</template>
+						</tr>
+						
+						<!-- 单价 -->
+						<tr>
+							<td>Unit Price</td>
+							
+							<template v-if="keys=='inward.unit_price'">
+								<td v-if='saving'>
+									<span>{{inward.unit_price | format}}</span>
+									<button class="btn btn-danger">正在保存...</button>		
+								</td>
+								<td v-else>
+									
+									<input type="text" :value='inward.unit_price' v-model='inward.unit_price' class='md'> 实例:12345.60
+
+									<button class="btn btn-success" @click='save'>保存</button>
+								</td>
+							</template>
+							<template v-else>
+								<td @dblclick="modify('inward','unit_price')">
+									{{inward.unit_price | format}}
+								</td>
+							</template>
+						</tr>
+
+						
+						<!-- 全额付款价格，计算属性 -->
+						<tr>
+							<td>Full Payment Price</td>
+							<td @dblclick="modify(false)">
+								{{package.full_payment_value | format}}
+							</td>
+						</tr>
+
+						<!-- 时间 -->
+						<tr>
+							<td>Duration</td>
+							<template v-if="keys=='package.limit_timelen.limit_timeunit'">
+								<td v-if='saving'>
+									<span>
+										{{package.limit_timelen}} 
+										{{package.limit_timeunit | timeunit }}
+									</span>									
+									<button class="btn btn-danger">正在保存...</button>
+								</td>
+								<td v-else>
+									
+									<input type="text" class="md" :value='package.limit_timelen' v-model='package.limit_timelen'>
+
+									<select :value='package.limit_timeunit' v-model='package.limit_timeunit' class='md'>
+										<option value="1">day</option>
+										<option value="2">month</option>
+										<option value="3">year </option>
+										<option value="4">week</option>
+									</select>
+									<button class="btn btn-success" @click='save'>保存</button>
+								</td>	
+							</template>
+							<template v-else>
+								<td @dblclick="modify('package','limit_timelen','limit_timeunit')" >
+									{{package.limit_timelen}} 
+									{{package.limit_timeunit | timeunit }}
+								</td>
+							</template>
+						</tr>
+						<!-- 全额付款奖励时长 -->
+						<tr>
+							<td>Extra Duration</td>
+							<template v-if="keys=='package.paid_timelen.extra_timeunit'">
+								<td v-if='saving'>
+									{{package.paid_timelen}} 
+									{{package.extra_timeunit | timeunit }}
+									<button class="btn btn-danger">正在保存...</button>		
+								</td>
+								<td v-else>
+									<input type="text" class="md" :value='package.paid_timelen' v-model='package.paid_timelen'>
+
+									<select :value='package.extra_timeunit' v-model='package.extra_timeunit' class='md'>
+										<option value="1">day</option>
+										<option value="2">month</option>
+										<option value="3">year </option>
+										<option value="4">week</option>
+									</select>								
+									<button class="btn btn-success" @click='save'>保存</button>
+								</td>
+							</template>
+							<template v-else>
+								<td @dblclick="modify('package','paid_timelen','extra_timeunit')">
+									{{package.paid_timelen}} 
+									{{package.extra_timeunit | timeunit }}
+								</td>
+							</template>
+
+						</tr>
+
+						<!-- 休学时间 -->
+						<tr>
+							<td>Suspension</td>
+
+							<template v-if="keys=='package.off_timelen.off_timeunit'">
+								<td v-if='saving'>
+									<span>
+										{{package.off_timelen}} 
+										{{package.off_timeunit | timeunit}}</span>
+									<button class="btn btn-danger">正在保存...</button>		
+								</td>
+								<td v-else>
+									<input type="text" :value='package.off_timelen' v-model='package.off_timelen' class='md'>
+
+									<select :value='package.off_timeunit' v-model='package.off_timeunit' class='md'>
+										<option value="1">day</option>
+										<option value="2">month</option>
+										<option value="3">year </option>
+										<option value="4">week</option>
+									</select>
+
+									<button class="btn btn-success" @click='save'>保存</button>
+								</td>
+							</template>
+							<template v-else>
+								<td @dblclick="modify('package','off_timelen','off_timeunit')">
+									{{package.off_timelen}} {{package.off_timeunit | timeunit}}
+								</td>
+							</template>	
+						</tr>
+						
+						<!-- 奖励休学 -->
+						<tr>
+							<td>Extra Suspension</td>
+							<template v-if="keys=='package.paid_off_timelen.extra_off_timeunit'">
+								<td v-if='saving'>
+									{{package.paid_off_timelen}} 
+									{{package.extra_off_timeunit | timeunit }}
+									<button class="btn btn-danger">正在保存...</button>		
+								</td>
+								<td v-else>
+									<input type="text" class="md" :value='package.paid_off_timelen' v-model='package.paid_off_timelen'>
+
+									<select :value='package.extra_off_timeunit' v-model='package.extra_off_timeunit' class='md'>
+										<option value="1">day</option>
+										<option value="2">month</option>
+										<option value="3">year </option>
+										<option value="4">week</option>
+									</select>								
+									<button class="btn btn-success" @click='save'>保存</button>
+								</td>
+							</template>
+							<template v-else>
+								<td @dblclick="modify('package','paid_off_timelen','extra_off_timeunit')">
+									{{package.paid_off_timelen}} 
+									{{package.extra_off_timeunit | timeunit }}
+								</td>
+							</template>
+						</tr>
+
+					</tbody>
+				</table>
+
+			</div>
+			
+			<!-- 辅助 -->
+			<div class="assist col-md-6">
+
+				<table class="table table-bordered" :class='classes'>
+					<tbody>
+						<tr class='success' :class='currentType'>
+							<td colspan="2">
+								<h3>
+									<span @click="tab('payment')" >全额付款</span>
+									<span @click="tab('present')">赠送</span>
+									<span @click="tab('promotion')" >推广</span>
+									<span class='btn btn-xs btn-warning pull-right' @click='createUrl'>生成链接</span>
+								</h3>
+							</td>
+						</tr>
+
+						<tr>
+							<td>Course Level</td>
+							<template v-if="keys=='current.course_level'">
+								<td v-if='saving'>
+									<span>
+									{{current.course_level | level}} {{current.class_limit| limit}}</span>
+									<button class="btn btn-danger">正在保存...</button>
+								</td>
+								<td v-else>
+									<select :value='current.course_level' v-model='current.course_level' class='md'>
+										<option value="1">General</option>
+										<option value="2">Special</option>
+										<option value="3">Trial</option>
+									</select>
+
+									<select :value='current.class_limit' v-model='current.class_limit' class='md'>
+										<option value="0">Group</option>
+										<option value="1">Private</option>
+										<option value="2">1-On-2 </option>
+										<option value="3">1-On-3 </option>
+										<option value="4">1-On-4</option>
+										<option value="8">1-On-8</option>
+										<option value="12">1-On-12</option>
+										<option value="20">1-On-20</option>
+									</select>
+									<button class="btn btn-success" @click='save'>保存</button>
+								</td>	
+							</template>
+							<template v-else>
+								<td @dblclick="modify('current','course_level')">{{current.course_level | level}} {{current.class_limit| limit}}</td>								
+							</template>
+						</tr>
+						<!--<tr>
+							<td>Course Type</td>
+							
+							<template v-if="keys=='current.course_type'">
+								<td v-if='saving'>
+									{{current.course_type | type}}
+									<button class="btn btn-danger">正在保存...</button>		
+								</td>
+								<td v-else>
+									<select :value='current.course_type' v-model='current.course_type'>
+										<option value="2">teach</option>
+										<option value="3">coach</option>
+									</select>								
+									<button class="btn btn-success" @click='save'>保存</button>
+								</td>
+							</template>
+							<template v-else>
+								<td @dblclick="modify('current','course_type')">
+									{{current.course_type | type}}
+								</td>
+							</template>	
+						</tr>-->
+						<tr>
+							<td>Lesson Num</td>
+
+							<template v-if="keys=='current.lesson_num'">
+								<td v-if='saving'>
+									<span v-if="current.lesson_timeunit=='0'">
+										{{current.lesson_num}} lessons
+									</span>
+									<span v-else>
+										{{current.lesson_num}} lessons/ {{current.lesson_timeunit | timeunit}}
+									</span>
+
+									<button class="btn btn-danger">正在保存...</button>		
+								</td>
+								<td v-else>
+									<input type="text" class="xs" :value='current.lesson_num' v-model='current.lesson_num'> lessons
+
+									<select :value='current.lesson_timeunit' v-model='current.lesson_timeunit' class='xs'>
+										<option value="0">不限</option>
+										<option value="1">day</option>
+										<option value="2">month</option>
+										<option value="3">year </option>
+										<option value="4">week</option>
+									</select>
+
+									<button class="btn btn-success" @click='save'>保存</button>
+								</td>
+							</template>
+							<template v-else>
+								<td @dblclick="modify('current','lesson_num')">
+									<span v-if="current.lesson_timeunit=='0'">
+										{{current.lesson_num}} lessons
+									</span>
+									<span v-else>
+										{{current.lesson_num}} lessons/ {{current.lesson_timeunit | timeunit}}
+									</span>
+								</td>
+							</template>							
+						</tr>
+
+						<tr>
+							<td>Unit Price</td>
+							<template v-if="keys=='current.unit_price'">
+								<td v-if='saving'>
+									{{current.unit_price | format}}
+									<button class="btn btn-danger">正在保存...</button>		
+								</td>
+								<td v-else>
+
+									<input type="text" :value='current.unit_price' v-model='current.unit_price' class='md'> 实例:12345.60
+									<button class="btn btn-success" @click='save'>保存</button>
+								</td>
+							</template>
+							<template v-else>
+								<td @dblclick="modify('current','unit_price')">
+									{{current.unit_price | format}}
+								</td>
+							</template>
+						</tr>
+
+						<tr>
+							<td>Book Rules</td>
+							<template v-if="keys=='current.lesson_num_day'">
+								<td v-if='saving'>
+									<span>{{current | rules}}</span>
+									<button class="btn btn-danger">正在保存...</button>		
+								</td>
+								<td v-else>
+
+									<input type="text" :value='current.lesson_num_day' v-model='current.lesson_num_day' class='xs'> lessons 								
+									<select :value='current.lesson_days_week' v-model='current.lesson_days_week' class='xs'>
+										<option value="5">Weekday</option>
+										<option value="7">Anyday</option>
+									</select>	
+
+								<button class="btn btn-success" @click='save'>保存</button>
+								</td>
+							</template>
+							<template v-else>
+								<td @dblclick="modify('current','lesson_num_day')">
+									{{current | rules}}
+								</td>
+							</template>
+						</tr>
+					</tbody>
+				</table>
+
+				<p class='pos'></p>
+				
+				<!-- 基本信息2 -->
+				<table class="table table-bordered">
+					<tr class='success'>
+						<td colspan="2">
+							<h3>基本信息2:</h3>
+						</td>
+					</tr>
+						<!-- 定课规则 -->
+						<tr>
+							<td>Book Rules</td>
+
+							<template v-if="keys=='inward.lesson_num_day'">
+								<td v-if='saving'>
+									<span>{{inward | rules}}</span>
+									<button class="btn btn-danger">正在保存...</button>		
+								</td>
+								<td v-else>
+
+									<input type="text" :value='inward.lesson_num_day' v-model='inward.lesson_num_day' class='xs'> lessons 								
+									<select :value='inward.lesson_days_week' v-model='inward.lesson_days_week' class='xs'>
+										<option value="5">Weekday</option>
+										<option value="7">Anyday</option>
+									</select>	
+
+								<button class="btn btn-success" @click='save'>保存</button>
+								</td>
+							</template>
+							<template v-else>
+								<td @dblclick="modify('inward','lesson_num_day')">
+									{{inward | rules}}
+								</td>
+							</template>
+						</tr>
+
+						<tr>
+							<td>Certificate</td>
+							<template v-if="keys=='package.certificate'">
+								<td v-if='saving'>
+									<span>{{package.certificate | certificate}}</span>
+									<button class="btn btn-danger">正在保存...</button>		
+								</td>
+								<td v-else>
+									<select :value='package.certificate' v-model='package.certificate' class='md'>
+										<option value=1>YES</option>
+										<option value=0>NO</option>
+									</select>
+									<button class="btn btn-success" @click='save'>保存</button>
+								</td>
+							</template>
+							<template v-else>
+								<td @dblclick="modify('package','certificate')">
+									<span>{{package.certificate | certificate}}</span>
+								</td>
+							</template>
+						</tr>
+
+					<tr>
+						<td>Refund Policy</td>
+
+						<template v-if="keys=='package.refund_policy'">
+							<td v-if='saving'>
+								<span>{{package.refund_policy}}</span>
+								<button class="btn btn-danger">正在保存...</button>		
+							</td>
+							<td v-else>
+								<input type="text" :value='package.refund_policy' v-model='package.refund_policy'>
+								<button class="btn btn-success" @click='save'>保存</button>
+							</td>
+						</template>
+						<template v-else>
+							<td @dblclick="modify('package','refund_policy')">
+								<span>{{package.refund_policy}}</span>
+							</td>
+						</template>						
+					</tr>
+				</table>
+
+				<p>
+					<span class='glyphicon glyphicon-info-sign'></span> 双击相应单元格进行编辑修改
+				</p>
+
+			</div>
+			
+		</div>
+	</template>
+
+</div>
